@@ -263,8 +263,9 @@ scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
-creds = Credentials.from_service_account_file(
-    "wfa-lebaran-a42842b2d9b4.json", scopes=scope
+creds = Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"],
+    scopes=scope
 )
 client  = gspread.authorize(creds)
 SHEET_ID = "1PvdyLJ3DRVHnd2zScnTICOSaX1pYNxzYjZ_g9ktui9o"
@@ -284,16 +285,17 @@ if existing != HEADERS:
 # CONSTANTS
 # ─────────────────────────────────────────────
 ALL_STAFF = sorted([
-    "Vial","Fandi","Geraldi","Riega","Baldy","Farras",
-    "Ade","Selvy","Meijika","Firda","Rida","Vero","Yati"
+    "Rifyal Tumber","Achmad Rifandi","Muhammad Geraldi Jagaddhita",
+    "Riega Wisudhantara","Farras Mahmud","Veronica Novi Heri","Suyati",
+    "Ade Puspitasari","Selvy Anggraini","Nur Anissa Firda Aulia","Meijika"
 ])
 
-WORK_HOURS = [f"{h:02d}:00" for h in range(0, 25)]  # 00:00–24:00
+WORK_HOURS = [f"{h:02d}:00" for h in range(8, 18)]  # 08:00–17:00
 
 CATEGORY_LIST = [
     "Booking","Voucher Issued","Follow Up Hotel","Follow Up Supplier",
     "Void","Refund","Rename Guest","Takeover Payment",
-    "Inject Debit DTM","Complaint Handling","Vendor Billing Summary",
+    "Inject Debit DTM","Complaint Handling","Rekap Tagihan",
 ]
 DETAIL_LIST = sorted([
     "New Hotel Booking","Booking Amendment","Booking Cancellation","Booking Confirmation",
@@ -456,11 +458,11 @@ if "Input" in menu:
         with r1a:
             task_date = st.date_input("📅 Tanggal", value=date.today())
         with r1b:
-            task_hour = st.selectbox("🕐 Jam", WORK_HOURS,
+            task_hour = st.selectbox("🕐 Jam Mulai", WORK_HOURS,
                                      index=max(0, datetime.now().hour - 8))
         with r1c:
             division = st.selectbox("🏢 Divisi", [
-                "Bookers","Admin"
+                "Hotel Reservation","Admin Reservation","Finance"
             ])
 
         # Row 2: kategori + detail
