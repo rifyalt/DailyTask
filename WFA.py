@@ -290,7 +290,7 @@ ALL_STAFF = sorted([
     "Ade Puspitasari","Selvy Anggraini","Nur Anissa Firda Aulia","Meijika"
 ])
 
-WORK_HOURS = [f"{h:02d}:00" for h in range(8, 18)]  # 08:00–17:00
+WORK_HOURS = [f"{h:02d}:00" for h in range(0, 25)]  # 00:00–24:00
 
 CATEGORY_LIST = [
     "Booking","Voucher Issued","Follow Up Hotel","Follow Up Supplier",
@@ -458,8 +458,9 @@ if "Input" in menu:
         with r1a:
             task_date = st.date_input("📅 Tanggal", value=date.today())
         with r1b:
-            task_hour = st.selectbox("🕐 Jam Mulai", WORK_HOURS,
-                                     index=max(0, datetime.now().hour - 8))
+            _now_hour = datetime.now().hour
+            _default_idx = min(_now_hour, len(WORK_HOURS) - 1)
+            task_hour = st.selectbox("🕐 Jam Mulai", WORK_HOURS, index=_default_idx)
         with r1c:
             division = st.selectbox("🏢 Divisi", [
                 "Hotel Reservation","Admin Reservation","Finance"
