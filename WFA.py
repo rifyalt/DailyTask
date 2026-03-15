@@ -285,7 +285,7 @@ if existing != HEADERS:
 # CONSTANTS
 # ─────────────────────────────────────────────
 ALL_STAFF = sorted([
-    "Vial","Fandi","Geraldi","Riega","Farras","Baldy"
+    "Vial","Fandi","Geraldi","Riega","Farras","Baldy",
     "Vero","Yati","Ade","Selvy","Firda","Meiji"
 ])
 
