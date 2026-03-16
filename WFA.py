@@ -499,7 +499,7 @@ if "Input" in menu:
             status = st.selectbox("*️⃣ Status", STATUS_LIST)
 
         # Komunikasi — multiselect checkboxes
-        st.markdown("<div style='font-size:12px;font-weight:500;color:#6b7280;margin-bottom:4px;'>📡 Jalur Komunikasi</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size:12px;font-weight:500;color:#6b7280;margin-bottom:4px;'>Jalur Komunikasi</div>", unsafe_allow_html=True)
         kom_channels = st.multiselect(
             "Jalur Komunikasi",
             options=["1️⃣ Email", "2️⃣ WhatsApp", "3️⃣ Telepon"],
