@@ -298,8 +298,8 @@ CATEGORY_LIST = [
 ]
 DETAIL_LIST = sorted([
     "New Hotel Booking","Booking Amendment","Booking Cancellation","Booking Confirmation",
-    "Voucher Issued","Voucher Resend","Voucher Correction",
-    "Follow Up Hotel","Follow Up Supplier","Follow Up Guest",
+    "Voucher Issued","Voucher Resend","Voucher Correction","Loading Rate","Hotel Mapping"
+    "Follow Up Hotel","Follow Up Supplier","Follow Up Guest","Extranet Training",
     "Special Request Handling","Room Request Handling",
     "Rename Guest","Add Guest Name","Takeover Payment Process","Credit Card Charge",
     "Inject Debit DTM","Refund Process","Void Transaction","Dispute Handling",
