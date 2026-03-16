@@ -294,12 +294,12 @@ WORK_HOURS = [f"{h:02d}:00" for h in range(0, 25)]  # 00:00–24:00
 CATEGORY_LIST = [
     "Booking","Voucher Issued","Follow Up Hotel","Follow Up Supplier",
     "Void","Refund","Rename Guest","Takeover Payment",
-    "Inject Debit DTM","Complaint Handling","Supplier Invoice Recap",
+    "Inject Debit DTM","Complaint Handling","Rekap Tagihan",
 ]
 DETAIL_LIST = sorted([
     "New Hotel Booking","Booking Amendment","Booking Cancellation","Booking Confirmation",
-    "Voucher Issued","Voucher Resend","Voucher Correction","Loading Rate","Hotel Mapping"
-    "Follow Up Hotel","Follow Up Supplier","Follow Up Guest","Extranet Training",
+    "Voucher Issued","Voucher Resend","Voucher Correction",
+    "Follow Up Hotel","Follow Up Supplier","Follow Up Guest",
     "Special Request Handling","Room Request Handling",
     "Rename Guest","Add Guest Name","Takeover Payment Process","Credit Card Charge",
     "Inject Debit DTM","Refund Process","Void Transaction","Dispute Handling",
@@ -349,10 +349,20 @@ def badge_class(status):
     return "badge-other"
 
 def parse_kom(s):
+    """Parse komunikasi detail — new format: 'Email, WhatsApp' or old 'Email:N WA:N Telp:N'"""
+    s = str(s)
+    # new format: comma-separated channel names
+    if ":" not in s:
+        channels = [c.strip() for c in s.split(",") if c.strip() and c.strip() != "-"]
+        email = sum(1 for c in channels if "Email" in c)
+        wa    = sum(1 for c in channels if "WhatsApp" in c or "WA" in c)
+        telp  = sum(1 for c in channels if "Telepon" in c or "Telp" in c)
+        return email, wa, telp
+    # legacy format: Email:N WA:N Telp:N
     try:
-        e = int(re.search(r'Email:(\d+)', str(s)).group(1))
-        w = int(re.search(r'WA:(\d+)',    str(s)).group(1))
-        t = int(re.search(r'Telp:(\d+)',  str(s)).group(1))
+        e = int(re.search(r'Email:(\d+)', s).group(1))
+        w = int(re.search(r'WA:(\d+)',    s).group(1))
+        t = int(re.search(r'Telp:(\d+)',  s).group(1))
         return e, w, t
     except:
         return 0, 0, 0
@@ -481,18 +491,37 @@ if "Input" in menu:
         with r3c:
             supplier = st.selectbox("🤝 Supplier", SUPPLIER_LIST)
 
-        # Row 4: qty + status + komunikasi
-        r4a, r4b, r4c, r4d, r4e = st.columns([2,2,1,1,1])
+        # Row 4: qty + status
+        r4a, r4b = st.columns(2)
         with r4a:
             qty = st.number_input("🔢 Qty", min_value=1, value=1)
         with r4b:
             status = st.selectbox("📌 Status", STATUS_LIST)
-        with r4c:
-            kom_email = st.number_input("📧 Email", min_value=0, value=0)
-        with r4d:
-            kom_wa    = st.number_input("💬 WA", min_value=0, value=0)
-        with r4e:
-            kom_telp  = st.number_input("📞 Telp", min_value=0, value=0)
+
+        # Komunikasi — multiselect checkboxes
+        st.markdown("<div style='font-size:12px;font-weight:500;color:#6b7280;margin-bottom:4px;'>📡 Jalur Komunikasi</div>", unsafe_allow_html=True)
+        kom_channels = st.multiselect(
+            "Jalur Komunikasi",
+            options=["📧 Email", "💬 WhatsApp", "📞 Telepon", "🖥️ Sistem/Portal", "📠 Fax"],
+            default=[],
+            label_visibility="collapsed",
+            placeholder="Pilih jalur komunikasi yang digunakan..."
+        )
+
+        # Timezone selector
+        TIMEZONE_OPTIONS = {
+            "WIB — Jakarta, Indonesia (UTC+7)":         "Asia/Jakarta",
+            "WITA — Makassar, Indonesia (UTC+8)":       "Asia/Makassar",
+            "WIT — Jayapura, Indonesia (UTC+9)":        "Asia/Jayapura",
+            "MYT — Kuala Lumpur, Malaysia (UTC+8)":     "Asia/Kuala_Lumpur",
+            "SGT — Singapura (UTC+8)":                  "Asia/Singapore",
+            "THA — Bangkok, Thailand (UTC+7)":          "Asia/Bangkok",
+        }
+        tz_label = st.selectbox(
+            "🌏 Zona Waktu",
+            options=list(TIMEZONE_OPTIONS.keys()),
+            index=0
+        )
 
         # Notes
         notes = st.text_area("📝 Catatan", placeholder="Opsional — isi jika ada hal penting...", height=80)
@@ -500,13 +529,20 @@ if "Input" in menu:
         submitted = st.form_submit_button("✅  Simpan Task", use_container_width=True)
 
         if submitted:
-            kom_total  = kom_email + kom_wa + kom_telp
-            kom_detail = f"Email:{kom_email} WA:{kom_wa} Telp:{kom_telp}"
+            import pytz
+            tz_name   = TIMEZONE_OPTIONS[tz_label]
+            tz_obj    = pytz.timezone(tz_name)
+            now_local = datetime.now(tz_obj)
+            tz_abbr   = tz_label.split(" — ")[0]   # e.g. "WIB"
+            ts = now_local.strftime(f"%Y-%m-%d %H:%M:%S") + f" {tz_abbr}"
+
+            kom_detail = ", ".join([c.split(" ", 1)[1] for c in kom_channels]) if kom_channels else "-"
+            kom_total  = len(kom_channels)
             new_row = [
                 str(task_date), task_hour, sel_staff, division,
                 category, detail, booking_id, hotel, supplier,
                 qty, status, kom_total, kom_detail, notes,
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                ts
             ]
             sheet.append_row(new_row)
             st.cache_data.clear()
