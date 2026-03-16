@@ -478,31 +478,31 @@ if "Input" in menu:
         # Row 2: kategori + detail
         r2a, r2b = st.columns(2)
         with r2a:
-            category = st.selectbox("🏷️ Kategori", CATEGORY_LIST)
+            category = st.selectbox("#️⃣ Kategori", CATEGORY_LIST)
         with r2b:
-            detail = st.selectbox("📋 Detail Aktivitas", DETAIL_LIST)
+            detail = st.selectbox("🆕 Detail Aktivitas", DETAIL_LIST)
 
         # Row 3: booking info
         r3a, r3b, r3c = st.columns(3)
         with r3a:
-            booking_id = st.text_input("🔖 Booking ID", placeholder="e.g. VAGHB2603842454")
+            booking_id = st.text_input("ℹ️ Booking ID", placeholder="e.g. VAGHB2603842454")
         with r3b:
-            hotel = st.text_input("🏩 Hotel", placeholder="e.g. Grand Hyatt Jakarta")
+            hotel = st.text_input("🛅 Hotel", placeholder="e.g. Grand Hyatt Jakarta")
         with r3c:
-            supplier = st.selectbox("🤝 Supplier", SUPPLIER_LIST)
+            supplier = st.selectbox("🛄 Supplier", SUPPLIER_LIST)
 
         # Row 4: qty + status
         r4a, r4b = st.columns(2)
         with r4a:
             qty = st.number_input("🔢 Qty", min_value=1, value=1)
         with r4b:
-            status = st.selectbox("📌 Status", STATUS_LIST)
+            status = st.selectbox("*️⃣ Status", STATUS_LIST)
 
         # Komunikasi — multiselect checkboxes
         st.markdown("<div style='font-size:12px;font-weight:500;color:#6b7280;margin-bottom:4px;'>📡 Jalur Komunikasi</div>", unsafe_allow_html=True)
         kom_channels = st.multiselect(
             "Jalur Komunikasi",
-            options=["📧 Email", "💬 WhatsApp", "📞 Telepon", "🖥️ Sistem/Portal", "📠 Fax"],
+            options=["1️⃣ Email", "2️⃣ WhatsApp", "3️⃣ Telepon"],
             default=[],
             label_visibility="collapsed",
             placeholder="Pilih jalur komunikasi yang digunakan..."
