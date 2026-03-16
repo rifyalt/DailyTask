@@ -430,7 +430,7 @@ if "Input" in menu:
 
     # ── My Tasks Today (per staff) ─────────────────
     # Staff selector outside form so we can show their timeline
-    sel_staff = st.selectbox("👤 Pilih nama Anda", ALL_STAFF, key="staff_selector")
+    sel_staff = st.selectbox("☺️ Pilih nama Anda", ALL_STAFF, key="staff_selector")
 
     # Show today's timeline for selected staff
     my_tasks = today_df[today_df["Staff"] == sel_staff] if not today_df.empty and "Staff" in today_df.columns else pd.DataFrame()
