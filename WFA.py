@@ -294,7 +294,7 @@ WORK_HOURS = [f"{h:02d}:00" for h in range(0, 25)]  # 00:00–24:00
 CATEGORY_LIST = [
     "Booking","Voucher Issued","Follow Up Hotel","Follow Up Supplier",
     "Void","Refund","Rename Guest","Takeover Payment",
-    "Inject Debit DTM","Complaint Handling","Rekap Tagihan",
+    "Inject Debit DTM","Complaint Handling","Supplier Invoice Recap",
 ]
 DETAIL_LIST = sorted([
     "New Hotel Booking","Booking Amendment","Booking Cancellation","Booking Confirmation",
