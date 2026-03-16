@@ -286,7 +286,7 @@ if existing != HEADERS:
 # ─────────────────────────────────────────────
 ALL_STAFF = sorted([
     "Vial","Fandi","Geraldi","Riega","Farras","Baldy",
-    "Vero","Yati","Ade","Selvy","Firda","Meiji"
+    "Vero","Yati","Ade","Selvy","Firda","Meiji","Rida"
 ])
 
 WORK_HOURS = [f"{h:02d}:00" for h in range(0, 25)]  # 00:00–24:00
